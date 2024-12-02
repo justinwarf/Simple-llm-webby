@@ -20,7 +20,7 @@ def ask():
 
     # Get session history from cookies
     session_history = request.cookies.get('history', '')
-    session_history += f"User: {user_input}\n"
+    session_history = f"User: {user_input}\n" + session_history  # Newest input at the top
 
     # Prepare the payload
     payload = {
@@ -41,7 +41,12 @@ def ask():
 
         # Extract the model's response
         model_response = data[0]["generated_text"].strip()
-        session_history += f"LLM: {model_response}\n"
+
+        # Remove "User:" from the end of the model's response if it appears
+        if model_response.endswith("User:"):
+            model_response = model_response[:-5].strip()
+
+        session_history = f"User: {user_input}\nLLM: {model_response}\n" + session_history  # Keep latest responses
 
         # Send the response back to the client
         resp = make_response(jsonify({"response": model_response}))
