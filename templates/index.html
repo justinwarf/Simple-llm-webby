@@ -9,11 +9,16 @@
 <body>
     <div class="container">
         <h1>Simple LLM Webby</h1>
+
+        <p><strong>Ask a question:</strong></p>
+        
         <form id="promptForm">
-            <label for="prompt">Enter your prompt:</label>
+            <div style="margin-bottom: 15px;"></div> <!-- Line break before input -->
             <textarea id="prompt" name="prompt" rows="5" required></textarea><br>
+            <div style="margin-bottom: 15px;"></div> <!-- Line break after input -->
             <button type="submit">Submit</button>
         </form>
+
         <div id="response"></div>
     </div>
 
