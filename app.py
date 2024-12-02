@@ -18,10 +18,11 @@ def ask():
     if not user_input:
         return jsonify({"error": "Prompt cannot be empty!"}), 400
 
-    # Get session history from cookies
+    # Get the session history, but only keep the most recent conversation (user + model)
     session_history = request.cookies.get('history', '')
-    # Only add the latest user input and previous response to the history
-    session_history = f"User: {user_input}\n" + session_history  # Newest input at the top
+    
+    # Only append the most recent user input and the previous response to the session history
+    session_history = f"User: {user_input}\n"  # Only include the most recent user input for context
 
     # Prepare the payload
     payload = {
@@ -47,8 +48,8 @@ def ask():
         if model_response.endswith("User:"):
             model_response = model_response[:-5].strip()
 
-        # Keep latest responses only
-        session_history = f"User: {user_input}\nLLM: {model_response}\n"  # Keep latest responses
+        # Save only the last response and question to the session history
+        session_history = f"User: {user_input}\nLLM: {model_response}\n"
 
         # Send the response back to the client
         resp = make_response(jsonify({"response": model_response}))
