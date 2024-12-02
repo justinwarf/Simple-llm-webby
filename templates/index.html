@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LLM Web App</title>
+    <title>Simple LLM Webby</title>
     <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>Ask the LLM</h1>
+        <h1>Simple LLM Webby</h1>
         <form id="promptForm">
             <label for="prompt">Enter your prompt:</label>
             <textarea id="prompt" name="prompt" rows="5" required></textarea><br>
@@ -23,15 +23,17 @@
             event.preventDefault();
             const prompt = document.getElementById('prompt').value;
             const responseDiv = document.getElementById('response');
+            responseDiv.innerHTML = "Loading...";
 
             const res = await fetch('/ask', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: new URLSearchParams({ prompt })
             });
+
             const data = await res.json();
             if (data.response) {
-                responseDiv.innerHTML = `<p><strong>Response:</strong> ${data.response}</p>`;
+                responseDiv.innerHTML = `<p><strong>Response:</strong></p><p>${data.response.replace(/\n/g, '<br>')}</p>`;
             } else {
                 responseDiv.innerHTML = `<p><strong>Error:</strong> ${data.error}</p>`;
             }
